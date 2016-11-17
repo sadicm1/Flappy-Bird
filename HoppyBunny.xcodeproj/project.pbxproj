@@ -74,21 +74,28 @@
 		7E1DBB901DD7B66200AB3028 /* HoppyBunny */ = {
 			isa = PBXGroup;
 			children = (
-				7E1DBB911DD7B66200AB3028 /* AppDelegate.swift */,
 				7E98EBEA1DDE44CD00AC0A9A /* Scene */,
-				7E1DBBA91DD7BE6A00AB3028 /* Hero.sks */,
+				7E98EBE51DDE443100AC0A9A /* SFX */,
+				7E98EBEC1DDE44F600AC0A9A /* Helpers */,
 				7E98EBEB1DDE44D900AC0A9A /* Actions */,
-				7E2B46801DDCFE660057EF3E /* GameEffects.sks */,
+				7E1DBBA91DD7BE6A00AB3028 /* Hero.sks */,
 				7E25CFE91DDA565C00CB2D88 /* Obstacle.sks */,
 				7E1DBB991DD7B66200AB3028 /* GameViewController.swift */,
-				7E98EBEC1DDE44F600AC0A9A /* Helpers */,
 				7E1DBB9B1DD7B66200AB3028 /* Main.storyboard */,
+				7E3E65361DDE566600F6A270 /* Supporting files */,
+			);
+			path = HoppyBunny;
+			sourceTree = "<group>";
+		};
+		7E3E65361DDE566600F6A270 /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				7E1DBB911DD7B66200AB3028 /* AppDelegate.swift */,
 				7E1DBB9E1DD7B66200AB3028 /* Assets.xcassets */,
-				7E98EBE51DDE443100AC0A9A /* SFX */,
 				7E1DBBA01DD7B66200AB3028 /* LaunchScreen.storyboard */,
 				7E1DBBA31DD7B66200AB3028 /* Info.plist */,
 			);
-			path = HoppyBunny;
+			name = "Supporting files";
 			sourceTree = "<group>";
 		};
 		7E98EBE51DDE443100AC0A9A /* SFX */ = {
@@ -112,6 +119,7 @@
 		7E98EBEB1DDE44D900AC0A9A /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				7E2B46801DDCFE660057EF3E /* GameEffects.sks */,
 				7E1DBB951DD7B66200AB3028 /* Actions.sks */,
 			);
 			name = Actions;

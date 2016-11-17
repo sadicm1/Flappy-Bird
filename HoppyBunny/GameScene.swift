@@ -18,8 +18,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var sinceTouch: TimeInterval = 0
     var spawnTimer: TimeInterval = 0
     let fixedDelta: TimeInterval = 1.0/60.0 /* 60 FPS */
-    let scrollSpeed: CGFloat = 160
-    var scrollLayer: SKNode!
+    let groundScrollSpeed: CGFloat = 160
+    var groundScrollLayer: SKNode!
+    let cloudScrollSpeed: CGFloat = 30
+    var cloudScrollLayer: SKNode!
     var obstacleLayer: SKNode!
     // UI Connections
     var buttonRestart: MSButtonNode!
@@ -36,8 +38,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Recursive node search for 'hero' (child of referenced node) */
         hero = self.childNode(withName: "//hero") as! SKSpriteNode
         
-        /* Set reference to scroll layer node */
-        scrollLayer = self.childNode(withName: "scrollLayer")
+        /* Set reference to ground scroll layer node */
+        groundScrollLayer = self.childNode(withName: "groundScrollLayer")
+        
+        // Set reference to cloud scroll layer node
+        cloudScrollLayer = self.childNode(withName: "cloudScrollLayer")
         
         // Set reference to obstacle layer node
         obstacleLayer = self.childNode(withName: "obstacleLayer")
@@ -127,8 +132,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Update spawn timer
         spawnTimer += fixedDelta
         
-        /* Process world scrolling */
-        scrollWorld()
+        /* Process ground scrolling */
+        scroll(groundScrollLayer, withSpeed: groundScrollSpeed)
+        
+        // Process cloud scrolling
+        scroll(cloudScrollLayer, withSpeed: cloudScrollSpeed)
         
         // Process obstacles
         updateObstacles()
@@ -194,31 +202,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         buttonRestart.state = .active
     }
     
-    func scrollWorld() {
+    func scroll(_ layer: SKNode, withSpeed speed: CGFloat) {
         /* Scroll World */
-        scrollLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
+        layer.position.x -= speed * CGFloat(fixedDelta)
         
         /* Loop through scroll layer nodes */
-        for ground in scrollLayer.children as! [SKSpriteNode] {
+        for node in layer.children as! [SKSpriteNode] {
             
-            /* Get ground node position, convert node position to scene space */
-            let groundPosition = scrollLayer.convert(ground.position, to: self)
+            /* Get node position, convert node position to scene space */
+            let nodePosition = layer.convert(node.position, to: self)
             
-            /* Check if ground sprite has left the scene */
-            if groundPosition.x <= -ground.size.width  {
+            /* Check if sprite has left the scene */
+            if nodePosition.x <= -node.size.width  {
                 
-                /* Reposition ground sprite to the second starting position */
-                let newPosition = CGPoint( x: (self.size.width / 2) + ground.size.width / 2, y: groundPosition.y)
+                /* Reposition the sprite to the second starting position */
+                let newPosition = CGPoint( x: (self.size.width / 2) + node.size.width / 2, y: nodePosition.y)
                 
                 /* Convert new node position back to scroll layer space */
-                ground.position = self.convert(newPosition, to: scrollLayer)
+                node.position = self.convert(newPosition, to: layer)
             }
         }
     }
     
     func updateObstacles() {
         // Update obstacles
-        obstacleLayer.position.x -= scrollSpeed * CGFloat(fixedDelta)
+        obstacleLayer.position.x -= groundScrollSpeed * CGFloat(fixedDelta)
         
         // Loop through obstacle layer nodes
         for obstacle in obstacleLayer.children as! [SKReferenceNode] {
