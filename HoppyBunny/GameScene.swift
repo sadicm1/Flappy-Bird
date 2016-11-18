@@ -12,6 +12,10 @@ enum GameSceneState {
     case active, gameOver
 }
 
+enum GameLevel {
+    case easy, medium, hard
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var hero: SKSpriteNode!
@@ -20,15 +24,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let fixedDelta: TimeInterval = 1.0/60.0 /* 60 FPS */
     
     // Scrolling ground
-    let groundScrollSpeed: CGFloat = 160
+    var groundScrollSpeed: CGFloat = 0.0
     var groundScrollLayer: SKNode!
     
     // Scrolling clouds
-    let cloudScrollSpeed: CGFloat = 20
+    var cloudScrollSpeed: CGFloat = 0.0
     var cloudScrollLayer: SKNode!
     
     // Scrolling crystal mountains
-    let crystalScrollSpeed: CGFloat = 5
+    var crystalScrollSpeed: CGFloat = 0.0
     var crystalScrollLayer: SKNode!
     
     var obstacleLayer: SKNode!
@@ -37,9 +41,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Game management
     var gameState: GameSceneState = .active
     
+    // Game level management
+    var gameLevel: GameLevel = .easy
+    var gameLevelLabel: SKLabelNode!
+    
     // Player score
     var scoreLabel: SKLabelNode!
     var points = 0
+    
+    
     
     override func didMove(to view: SKView) {
         /* Set up your scene here */
@@ -49,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         /* Set reference to ground scroll layer node */
         groundScrollLayer = self.childNode(withName: "groundScrollLayer")
+        
         
         // Set reference to cloud scroll layer node
         cloudScrollLayer = self.childNode(withName: "cloudScrollLayer")
@@ -64,6 +75,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Setup score label node
         scoreLabel = self.childNode(withName: "scoreLabel") as! SKLabelNode
+        
+        // Setup game level label node
+        gameLevelLabel = self.childNode(withName: "gameLevelLabel") as! SKLabelNode
         
         // Setup restart button selection handler
         buttonRestart.selectedHandler = { [unowned self] in
@@ -100,7 +114,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         
         /* Apply vertical impulse */
-        hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 250))
+        hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
         
         /* Apply subtle rotation */
         hero.physicsBody?.applyAngularImpulse(1)
@@ -155,6 +169,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Process obstacles
         updateObstacles()
+        
+        // Process game level
+        updateGameLevel()
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -176,6 +193,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             // update score label
             scoreLabel.text = String(points)
+            
+            // update game level
+            switch points {
+            case 0..<5:
+                gameLevel = .easy
+            case 5..<10:
+                gameLevel = .medium
+            default:
+                gameLevel = .hard
+            }
             
             // now we can return
             return
@@ -273,6 +300,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             // Reset spawn timer
             spawnTimer = 0
+        }
+    }
+    
+    func updateGameLevel() {
+        // update scroll speeds
+        cloudScrollSpeed = crystalScrollSpeed * 4
+        groundScrollSpeed = crystalScrollSpeed * 32
+        
+        // check game level and update values accordingly
+        switch gameLevel {
+        case .easy:
+            crystalScrollSpeed = 5
+        case .medium:
+            crystalScrollSpeed = 10
+            self.physicsWorld.gravity.dy = -5.0
+            hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
+            gameLevelLabel.text = "Level: " + String(describing: gameLevel).capitalized
+        case .hard:
+            crystalScrollSpeed = 15
+            self.physicsWorld.gravity.dy = -7.0
+            hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
+            gameLevelLabel.text = "Level: " + String(describing: gameLevel).capitalized
         }
     }
     
