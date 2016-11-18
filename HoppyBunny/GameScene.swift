@@ -18,10 +18,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var sinceTouch: TimeInterval = 0
     var spawnTimer: TimeInterval = 0
     let fixedDelta: TimeInterval = 1.0/60.0 /* 60 FPS */
+    
+    // Scrolling ground
     let groundScrollSpeed: CGFloat = 160
     var groundScrollLayer: SKNode!
-    let cloudScrollSpeed: CGFloat = 30
+    
+    // Scrolling clouds
+    let cloudScrollSpeed: CGFloat = 20
     var cloudScrollLayer: SKNode!
+    
+    // Scrolling crystal mountains
+    let crystalScrollSpeed: CGFloat = 5
+    var crystalScrollLayer: SKNode!
+    
     var obstacleLayer: SKNode!
     // UI Connections
     var buttonRestart: MSButtonNode!
@@ -43,6 +52,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Set reference to cloud scroll layer node
         cloudScrollLayer = self.childNode(withName: "cloudScrollLayer")
+        
+        // Set reference to crystals mountain scroll layer node
+        crystalScrollLayer = self.childNode(withName: "crystalScrollLayer")
         
         // Set reference to obstacle layer node
         obstacleLayer = self.childNode(withName: "obstacleLayer")
@@ -137,6 +149,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Process cloud scrolling
         scroll(cloudScrollLayer, withSpeed: cloudScrollSpeed)
+        
+        // Process crystal mountains scrolling
+        scroll(crystalScrollLayer, withSpeed: crystalScrollSpeed)
         
         // Process obstacles
         updateObstacles()
