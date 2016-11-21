@@ -35,6 +35,8 @@ class MSButtonNode: SKSpriteNode {
       case .selected:
         /* Semi transparent */
         self.alpha = 0.7
+        let clickSound = SKAction.playSoundFileNamed("click.wav", waitForCompletion: false)
+        self.run(clickSound)
         break
       case .hidden:
         /* Disable touch */
