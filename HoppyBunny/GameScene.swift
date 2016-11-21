@@ -50,6 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   // Player score
   var scoreLabel: SKLabelNode!
+  var highestScoreLabel: SKLabelNode!
   var points = 0
 
   
@@ -76,10 +77,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     buttonRestart = self.childNode(withName: "buttonRestart") as! MSButtonNode
     rewardingStar = self.childNode(withName: "rewardingStar") as! MSButtonNode
     
-    // Setup score label node
+    // Setup label nodes
     scoreLabel = self.childNode(withName: "scoreLabel") as! SKLabelNode
-    
-    // Setup game level label node
+    highestScoreLabel = self.childNode(withName: "highestScoreLabel") as! SKLabelNode
     gameLevelLabel = self.childNode(withName: "gameLevelLabel") as! SKLabelNode
     
     // Setup restart button selection handler
@@ -209,6 +209,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       // update score label
       scoreLabel.text = String(points)
       
+      // update highest score label
+      highestScoreLabel.text = "Highest Score: " + String(points)
+      
       // now we can return
       return
     }
@@ -247,6 +250,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Show restart button
     buttonRestart.state = .active
+    
+    // Show highest score label
+    highestScoreLabel.alpha = 1
+    
+    // Hide score label
+    scoreLabel.alpha = 0
   }
   
   
