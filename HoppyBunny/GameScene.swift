@@ -118,7 +118,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
     
     /* Apply vertical impulse */
-    hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
+    hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 200))
     
     /* Apply subtle rotation */
     hero.physicsBody?.applyAngularImpulse(1)
@@ -301,7 +301,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // Time to add a new obstacle?
-    if spawnTimer >= 1.5 {
+    if spawnTimer >= 3 {
       // Create a new obstacle reference object using our obstacle resource
       let resourcePath = Bundle.main.path(forResource: "Obstacle", ofType: "sks")
       let newObstacle = SKReferenceNode(url: URL(fileURLWithPath: resourcePath!))
@@ -337,16 +337,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // check game level and update values accordingly
     switch gameLevel {
     case .easy:
-      crystalScrollSpeed = 5
+      crystalScrollSpeed = 2
     case .medium:
-      crystalScrollSpeed = 10
-      self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
-      hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
+      crystalScrollSpeed = 4
+      self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -7.0)
+      hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 8))
       gameLevelLabel.text = "Level: " + String(describing: gameLevel).capitalized
     case .hard:
-      crystalScrollSpeed = 15
-      self.physicsWorld.gravity.dy = -7.0
-      hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40))
+      crystalScrollSpeed = 6
+      self.physicsWorld.gravity.dy = -9.0
+      hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 13))
       gameLevelLabel.text = "Level: " + String(describing: gameLevel).capitalized
     }
   }
